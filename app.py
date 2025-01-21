@@ -10,20 +10,17 @@ db.init_app(app)
 def create_tables():
     db.create_all()
 
-# Home Route
 @app.route('/')
 def home():
     quizzes = Quiz.query.all()  
     return render_template('home.html', quizzes=quizzes)
 
-# Create Quiz
 @app.route('/create-quiz', methods=['GET', 'POST'])
 def create_quiz():
     if request.method == 'POST':
         title = request.form['title']
         questions = []
 
-        # Loop through the dynamically added questions
         question_counter = 1
         while f'question_{question_counter}' in request.form:
             question_text = request.form[f'question_{question_counter}']
@@ -49,7 +46,6 @@ def create_quiz():
     
     return render_template('create_quiz.html')
 
-# Take Quiz
 @app.route('/take-quiz/<int:quiz_id>', methods=['GET', 'POST'])
 def take_quiz(quiz_id):
     quiz = Quiz.query.get_or_404(quiz_id)
@@ -67,14 +63,12 @@ def take_quiz(quiz_id):
         return redirect(url_for('home'))
     return render_template('take_quiz.html', quiz=quiz, enumerate=enumerate)
 
-# View Participants (Names and Scores)
 @app.route('/quiz-participants/<int:quiz_id>')
 def quiz_participants(quiz_id):
     quiz = Quiz.query.get_or_404(quiz_id)
     results = Result.query.filter_by(quiz_id=quiz_id).all()
     return render_template('quiz_participants.html', quiz=quiz, results=results)
 
-# Clear Participants
 @app.route('/clear-results/<int:quiz_id>', methods=['POST'])
 def clear_results(quiz_id):
     quiz = Quiz.query.get_or_404(quiz_id)
@@ -83,7 +77,6 @@ def clear_results(quiz_id):
     flash(f"All participants' results for the quiz '{quiz.title}' have been cleared.", 'success')
     return redirect(url_for('quiz_participants', quiz_id=quiz_id))
 
-# Delete Quiz
 @app.route('/delete-quiz/<int:quiz_id>', methods=['POST'])
 def delete_quiz(quiz_id):
     quiz = Quiz.query.get_or_404(quiz_id)
@@ -92,7 +85,5 @@ def delete_quiz(quiz_id):
     flash(f"Quiz '{quiz.title}' has been deleted.", 'success')
     return redirect(url_for('home'))
 
-
-# Run App
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)

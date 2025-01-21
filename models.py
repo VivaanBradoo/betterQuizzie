@@ -5,8 +5,8 @@ db = SQLAlchemy()
 class Quiz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)
-    data = db.Column(db.JSON, nullable=False)  # Stores questions and options
-    taken_count = db.Column(db.Integer, default=0)  # How many times the quiz was taken
+    data = db.Column(db.JSON, nullable=False)  
+    taken_count = db.Column(db.Integer, default=0)  
 
 class Result(db.Model):
     id = db.Column(db.Integer, primary_key=True)
