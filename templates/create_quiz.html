@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Create a Quiz</h1>
+<form method="POST" id="quiz-form">
+    <div class="mb-3">
+        <label for="title" class="form-label">Quiz Title</label>
+        <input type="text" class="form-control" name="title" required>
+    </div>
+    
+    <div id="questions-container">
+        <!-- Questions will be dynamically added here -->
+    </div>
+
+    <div class="mt-3">
+        <button type="button" id="add-question" class="btn btn-secondary">Add Question</button>
+    </div>
+    
+    <button type="submit" class="btn btn-primary mt-3">Create Quiz</button>
+</form>
+
+<script>
+    let questionCounter = 0;
+
+    document.getElementById('add-question').addEventListener('click', function() {
+        questionCounter++;
+
+        const questionHtml = `
+            <div class="card my-3" id="question-${questionCounter}">
+                <div class="card-body">
+                    <h5 class="card-title">Question ${questionCounter}</h5>
+                    <div class="form-group">
+                        <label>Question Text</label>
+                        <input type="text" class="form-control" name="question_${questionCounter}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Options</label>
+                        <input type="text" class="form-control my-1" name="option_${questionCounter}_1" placeholder="Option 1" required>
+                        <input type="text" class="form-control my-1" name="option_${questionCounter}_2" placeholder="Option 2" required>
+                        <input type="text" class="form-control my-1" name="option_${questionCounter}_3" placeholder="Option 3" required>
+                        <input type="text" class="form-control my-1" name="option_${questionCounter}_4" placeholder="Option 4" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Correct Option (1-4)</label>
+                        <input type="number" class="form-control" name="correct_${questionCounter}" min="1" max="4" required>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const container = document.getElementById('questions-container');
+        container.insertAdjacentHTML('beforeend', questionHtml);
+    });
+</script>
+{% endblock %}

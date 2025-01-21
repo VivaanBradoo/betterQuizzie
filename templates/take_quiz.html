@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ quiz.title }}</h1>
+<form method="POST">
+    <div class="mb-3">
+        <label for="user_name" class="form-label">Your Name</label>
+        <input type="text" class="form-control" name="user_name" required>
+    </div>
+    {% for i, question in enumerate(quiz.data) %}
+        <div class="mb-3">
+            <p><strong>{{ question['question'] }}</strong></p>
+            {% for j, option in enumerate(question['options']) %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="question_{{ i + 1 }}" value="{{ j + 1 }}" required>
+                    <label class="form-check-label">{{ option }}</label>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
