@@ -67,6 +67,32 @@ def take_quiz(quiz_id):
         return redirect(url_for('home'))
     return render_template('take_quiz.html', quiz=quiz, enumerate=enumerate)
 
+# View Participants (Names and Scores)
+@app.route('/quiz-participants/<int:quiz_id>')
+def quiz_participants(quiz_id):
+    quiz = Quiz.query.get_or_404(quiz_id)
+    results = Result.query.filter_by(quiz_id=quiz_id).all()
+    return render_template('quiz_participants.html', quiz=quiz, results=results)
+
+# Clear Participants
+@app.route('/clear-results/<int:quiz_id>', methods=['POST'])
+def clear_results(quiz_id):
+    quiz = Quiz.query.get_or_404(quiz_id)
+    Result.query.filter_by(quiz_id=quiz_id).delete()
+    db.session.commit()
+    flash(f"All participants' results for the quiz '{quiz.title}' have been cleared.", 'success')
+    return redirect(url_for('quiz_participants', quiz_id=quiz_id))
+
+# Delete Quiz
+@app.route('/delete-quiz/<int:quiz_id>', methods=['POST'])
+def delete_quiz(quiz_id):
+    quiz = Quiz.query.get_or_404(quiz_id)
+    db.session.delete(quiz)
+    db.session.commit()
+    flash(f"Quiz '{quiz.title}' has been deleted.", 'success')
+    return redirect(url_for('home'))
+
+
 # Run App
 if __name__ == '__main__':
     app.run(debug=True)

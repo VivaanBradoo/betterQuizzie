@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">Participants for "{{ quiz.title }}"</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in results %}
+        <tr>
+            <td>{{ result.user_name }}</td>
+            <td>{{ result.score }}/{{ quiz.data|length }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<form action="{{ url_for('clear_results', quiz_id=quiz.id) }}" method="POST">
+    <button type="submit" class="btn btn-danger">Clear Participants</button>
+</form>
+
+<a class="btn btn-primary" href="{{ url_for('home') }}">Back to Home</a>
+
+{% endblock %} 
