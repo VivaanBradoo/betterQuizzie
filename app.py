@@ -81,13 +81,22 @@ def clear_results(quiz_id):
     flash(f"All participants' results for the quiz '{quiz.title}' have been cleared.", 'success')
     return redirect(url_for('quiz_participants', quiz_id=quiz_id))
 
-@app.route('/delete-quiz/<int:quiz_id>', methods=['POST'])
+@app.route('/delete_quiz/<int:quiz_id>', methods=['POST'])
 def delete_quiz(quiz_id):
-    quiz = Quiz.query.get_or_404(quiz_id)
-    db.session.delete(quiz)
-    db.session.commit()
-    flash(f"Quiz '{quiz.title}' has been deleted.", 'success')
-    return redirect(url_for('home'))
+    try:
+        quiz = Quiz.query.get(quiz_id)
+        if not quiz:
+            return "Quiz not found", 404
+
+        Result.query.filter_by(quiz_id=quiz_id).delete()
+        db.session.delete(quiz)
+        db.session.commit()
+        return redirect('/')
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error deleting quiz: {e}")
+        return f"An error occurred: {e}", 500
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)

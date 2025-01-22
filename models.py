@@ -4,6 +4,7 @@ db = SQLAlchemy()
 
 class Quiz(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    results = db.relationship('Result', backref='quiz', cascade="all, delete-orphan")
     title = db.Column(db.String(150), nullable=False)
     data = db.Column(db.JSON, nullable=False)  
     taken_count = db.Column(db.Integer, default=0)  
