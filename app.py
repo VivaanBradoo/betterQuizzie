@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models import db, Quiz, Result
 from config import Config
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -8,7 +9,10 @@ db.init_app(app)
 
 @app.before_request
 def create_tables():
-    db.create_all()
+    try:
+        db.create_all()
+    except SQLAlchemy.exc.ProgrammingError:
+        print("Table already exists, skipping creation.")
 
 @app.route('/')
 def home():
