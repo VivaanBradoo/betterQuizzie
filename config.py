@@ -1,6 +1,6 @@
 import os
 
 class Config:
-    SECRET_KEY = os.getenv("MAIN_KEY")
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
+    SECRET_KEY = 'luckluckluck'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://database_owner:npg_eHnpN6W3qXGZ@ep-dry-voice-a97peo6t.gwc.azure.neon.tech/database?sslmode=require'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
